@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
     } on FirebaseAuth catch (e) {
       print(e);
       setState(() {
-        errormessage = e.message.toString();
+        // errormessage = e.message.toString();
       });
     }
     Navigator.pop(context);
