@@ -1,4 +1,6 @@
 import 'package:budget_tracker/transactiondata.dart';
+import 'package:budget_tracker/transactions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,24 +14,35 @@ class AddTransactionDialog extends StatefulWidget {
 }
 
 class _AddTransactionDialogState extends State<AddTransactionDialog> {
-  final TextEditingController nameController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
-  final TextEditingController categoryController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
+  final TextEditingController tranName = TextEditingController();
+  DateTime tranDate = DateTime.now();
+  final TextEditingController tranAmount = TextEditingController();
 
   // Function to show the date picker
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: tranDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
     if (picked != null) {
       setState(() {
-        selectedDate = picked;
+        tranDate = picked;
       });
     }
+  }
+
+  Future createUser() async {
+    final docUser = FirebaseFirestore.instance.collection('Transactions').doc();
+    final newTransaction = Transactions(
+      tranName: tranName.text,
+      tranDate: tranDate,
+      tranAmount: double.parse(tranAmount.text),
+    );
+
+    final json = newTransaction.toJson();
+    await docUser.set(json);
   }
 
   @override
@@ -40,7 +53,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
-            controller: nameController,
+            controller: tranName,
             decoration: const InputDecoration(labelText: 'Name'),
           ),
           Row(
@@ -51,8 +64,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                   child: AbsorbPointer(
                     child: TextFormField(
                       controller: TextEditingController(
-                          text:
-                              DateFormat('MMMM dd, yyyy').format(selectedDate)),
+                          text: DateFormat('MMMM dd, yyyy').format(tranDate)),
                       decoration: const InputDecoration(labelText: 'Date'),
                     ),
                   ),
@@ -65,11 +77,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
             ],
           ),
           TextFormField(
-            controller: categoryController,
-            decoration: const InputDecoration(labelText: 'Category'),
-          ),
-          TextFormField(
-            controller: amountController,
+            controller: tranAmount,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(labelText: 'Amount'),
           ),
@@ -84,26 +92,8 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            String name = nameController.text;
-            String category = categoryController.text;
-            double amount = double.tryParse(amountController.text) ?? 0.0;
-
-            final newTransaction = TransactionData(
-              tranName: name,
-              tranDate: DateFormat('MMMM dd, yyyy').format(selectedDate),
-              tranCategory: category,
-              tranAmount: amount,
-            );
-
-            //Print all the inputs
-            // print('Transaction Data: $newTransaction');
-            // print('Name: $name');
-            // print('Date: ${DateFormat('MMMM dd, yyyy').format(selectedDate)}');
-            // print('Category: $category');
-            // print('Amount: $amount');
-
-            widget.onTransactionAdded(newTransaction);
-            // Navigator.of(context).pop();
+            createUser();
+            Navigator.of(context).pop();
           },
           child: const Text('Save'),
         ),

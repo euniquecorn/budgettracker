@@ -1,6 +1,7 @@
 import 'package:budget_tracker/transactions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionView extends StatelessWidget {
   const TransactionView({super.key});
@@ -23,6 +24,7 @@ class TransactionView extends StatelessWidget {
   }
 
   Widget transactionList(Transactions transactions) => InkWell(
+        onTap: () {},
         child: Card(
           elevation: 2,
           shape: const RoundedRectangleBorder(
@@ -46,7 +48,8 @@ class TransactionView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      transactions.tranDate,
+                      DateFormat('MMMM dd, yyyy').format(transactions.tranDate),
+                      // Format DateTime as a String using DateFormat
                       style: const TextStyle(fontSize: 14),
                     ),
                     Text(
