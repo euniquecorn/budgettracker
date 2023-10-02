@@ -38,7 +38,7 @@ class _AllDataState extends State<AllData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List of Firebase User'),
+        title: const Text('Users'),
       ),
       body: StreamBuilder<List<Users>>(
           stream: readUsers(),

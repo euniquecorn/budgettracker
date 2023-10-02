@@ -1,3 +1,4 @@
+import 'package:budget_tracker/homepage.dart';
 import 'package:budget_tracker/page1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    errormessage = "This is an error";
+    errormessage = "Login error.";
     isError = false;
     super.initState();
   }
@@ -113,23 +114,24 @@ class _LoginState extends State<Login> {
         email: username,
         password: password,
       );
-      setState(() {
-        errormessage = "";
-      });
 
       // Navigate to Page1 upon successful login.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const Page1(),
+          builder: (context) => const HomePage(),
         ),
       );
     } on FirebaseAuthException catch (e) {
-      print(e);
       setState(() {
-        errormessage = e.message.toString();
+        isError = true;
+        errormessage = 'Error: ${e.message.toString()}';
       });
     } catch (e) {
       print(e.toString()); // Handle other exceptions if needed.
+      setState(() {
+        isError = true;
+        errormessage = 'Error: ${e.toString()}';
+      });
     }
 
     Navigator.pop(context);
