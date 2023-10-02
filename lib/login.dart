@@ -1,3 +1,4 @@
+import 'package:budget_tracker/page1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -97,7 +98,7 @@ class _LoginState extends State<Login> {
     fontSize: 38,
   );
 
-  Future checkLogin(username, password) async {
+  Future<void> checkLogin(username, password) async {
     showDialog(
       context: context,
       useRootNavigator: false,
@@ -115,12 +116,22 @@ class _LoginState extends State<Login> {
       setState(() {
         errormessage = "";
       });
-    } on FirebaseAuth catch (e) {
+
+      // Navigate to Page1 upon successful login.
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const Page1(),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
       print(e);
       setState(() {
-        // errormessage = e.message.toString();
+        errormessage = e.message.toString();
       });
+    } catch (e) {
+      print(e.toString()); // Handle other exceptions if needed.
     }
+
     Navigator.pop(context);
   }
 }

@@ -22,6 +22,10 @@ class _Page1State extends State<Page1> {
           children: [
             const Text('You have successfully connected to Firebase'),
             const SizedBox(height: 15),
+            const Text('signed as:'),
+            Text(user.email!),
+            const SizedBox(height: 15),
+            const SizedBox(height: 15),
             ElevatedButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
