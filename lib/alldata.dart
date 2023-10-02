@@ -26,15 +26,34 @@ class _AllDataState extends State<AllData> {
         );
   }
 
+  Widget buildList(Users users) => ListTile(
+        leading: const Icon(Icons.person),
+        title: Text(users.name),
+        subtitle: Text(users.email),
+        dense: true,
+        onTap: () {},
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('List of Firebase User'),
       ),
-      body: ListView(
-        children: [],
-      ),
+      body: StreamBuilder<List<Users>>(
+          stream: readUsers(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong! ${snapshot.error}');
+            } else if (snapshot.hasData) {
+              final users = snapshot.data!;
+              return ListView(children: users.map(buildList).toList());
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 }
