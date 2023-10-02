@@ -114,9 +114,6 @@ class _LoginState extends State<Login> {
         email: username,
         password: password,
       );
-      setState(() {
-        errormessage = "Error signing in with email and password.";
-      });
 
       // Navigate to Page1 upon successful login.
       Navigator.of(context).pushReplacement(
