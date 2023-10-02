@@ -4,6 +4,7 @@ import 'package:budget_tracker/firebase_options.dart';
 import 'package:budget_tracker/homepage.dart';
 import 'package:budget_tracker/login.dart';
 import 'package:budget_tracker/page1.dart';
+import 'package:budget_tracker/transactionview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Authenticator(),
+      home: const HomePage(),
     );
   }
 }
