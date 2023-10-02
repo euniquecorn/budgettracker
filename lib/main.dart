@@ -1,3 +1,4 @@
+import 'package:budget_tracker/alldata.dart';
 import 'package:budget_tracker/authenticator.dart';
 import 'package:budget_tracker/firebase_options.dart';
 import 'package:budget_tracker/homepage.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Authenticator(),
+      home: const AllData(),
     );
   }
 }
