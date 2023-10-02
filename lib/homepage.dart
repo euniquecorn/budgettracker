@@ -2,6 +2,7 @@ import 'package:budget_tracker/addtransaction.dart';
 import 'package:budget_tracker/transactiondata.dart';
 import 'package:budget_tracker/transactionlist.dart';
 import 'package:budget_tracker/transactionlistview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -132,6 +133,18 @@ class _HomePageState extends State<HomePage> {
             child:
                 TransactionListView(transactionList: transactionList.itemList),
           ),
+          Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text('SIGN OUT'),
+            ),
+          ],
+        ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
