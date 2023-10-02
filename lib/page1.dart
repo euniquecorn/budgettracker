@@ -14,13 +14,13 @@ class _Page1State extends State<Page1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Firebase Connection'),
+        title: const Text('Success!'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('You have successfully connected to Firebase'),
+            const Text('You have successfully logged in.'),
             const SizedBox(height: 15),
             const Text('signed as:'),
             Text(user.email!),
