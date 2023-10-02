@@ -1,3 +1,4 @@
+import 'package:budget_tracker/homepage.dart';
 import 'package:budget_tracker/login.dart';
 import 'package:budget_tracker/page1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +23,7 @@ class _AuthenticatorState extends State<Authenticator> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasData) {
-            return const Page1();
+            return const HomePage();
           } else {
             return const Login();
           }
