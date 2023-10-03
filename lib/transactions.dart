@@ -28,4 +28,20 @@ class Transactions {
         'tranDate': Timestamp.fromDate(tranDate),
         'tranAmount': tranAmount,
       };
+
+  Future<void> editTransaction(Transactions updatedTransaction,
+      Function(Transactions) onTransactionUpdated) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Transactions')
+          .doc(updatedTransaction.id)
+          .update(updatedTransaction.toJson());
+
+      // Call the callback to handle UI updates
+      onTransactionUpdated(updatedTransaction);
+    } catch (e) {
+      print('Error updating transaction: $e');
+      // Handle the error, e.g., show an error message to the user
+    }
+  }
 }

@@ -1,20 +1,24 @@
-import 'package:budget_tracker/transactions.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:budget_tracker/edittransaction.dart';
+import 'package:budget_tracker/transactions.dart';
 
-class TransactionView extends StatelessWidget {
-  const TransactionView({super.key});
+class TransactionView extends StatefulWidget {
+  const TransactionView({Key? key}) : super(key: key);
 
+  @override
+  _TransactionViewState createState() => _TransactionViewState();
+}
+
+class _TransactionViewState extends State<TransactionView> {
   Stream<List<Transactions>> readUsers() {
     return FirebaseFirestore.instance
         .collection('Transactions')
         .snapshots()
         .map(
           (snapshot) => snapshot.docs
-              // type the snapshot object using map method
               .map(
-                // call the fromJson function that was created from the  Employee class.
                 (doc) => Transactions.fromJson(
                   doc.data(),
                 ),
@@ -27,6 +31,18 @@ class TransactionView extends StatelessWidget {
     final docUser =
         FirebaseFirestore.instance.collection('Transactions').doc(id);
     docUser.delete();
+  }
+
+  void _showEditDialog(Transactions transactions) {
+    showDialog(
+      context: context,
+      builder: (_) => EditTransactionDialog(
+        transaction: transactions,
+        onTransactionUpdated: (updatedTransaction) {
+          // Handle updated transaction, e.g., update the UI or state
+        },
+      ),
+    );
   }
 
   Widget transactionList(Transactions transactions) => InkWell(
@@ -56,9 +72,8 @@ class TransactionView extends StatelessWidget {
                     ),
                     PopupMenuButton<String>(
                       onSelected: (String choice) {
-                        // Handle menu item selection here
                         if (choice == 'Edit') {
-                          // Handle edit action
+                          _showEditDialog(transactions);
                         } else if (choice == 'Delete') {
                           deleteUser(transactions.id);
                         }
@@ -112,7 +127,8 @@ class TransactionView extends StatelessWidget {
           } else if (snapshot.hasData) {
             final transactions = snapshot.data!;
             return ListView(
-                children: transactions.map(transactionList).toList());
+              children: transactions.map(transactionList).toList(),
+            );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
