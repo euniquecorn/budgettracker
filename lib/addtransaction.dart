@@ -36,6 +36,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   Future createUser() async {
     final docUser = FirebaseFirestore.instance.collection('Transactions').doc();
     final newTransaction = Transactions(
+      id: docUser.id,
       tranName: tranName.text,
       tranDate: tranDate,
       tranAmount: double.parse(tranAmount.text),

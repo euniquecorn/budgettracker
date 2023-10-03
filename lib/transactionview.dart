@@ -23,6 +23,12 @@ class TransactionView extends StatelessWidget {
         );
   }
 
+  Future deleteUser(String id) async {
+    final docUser =
+        FirebaseFirestore.instance.collection('Transactions').doc(id);
+    docUser.delete();
+  }
+
   Widget transactionList(Transactions transactions) => InkWell(
         onTap: () {},
         child: Card(
@@ -38,10 +44,39 @@ class TransactionView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  transactions.tranName,
-                  style: const TextStyle(
-                      fontSize: 17, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      transactions.tranName,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    PopupMenuButton<String>(
+                      onSelected: (String choice) {
+                        // Handle menu item selection here
+                        if (choice == 'Edit') {
+                          // Handle edit action
+                        } else if (choice == 'Delete') {
+                          deleteUser(transactions.id);
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return <PopupMenuEntry<String>>[
+                          const PopupMenuItem<String>(
+                            value: 'Edit',
+                            child: Text('Edit'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'Delete',
+                            child: Text('Delete'),
+                          ),
+                        ];
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 13),
                 Row(
@@ -49,13 +84,14 @@ class TransactionView extends StatelessWidget {
                   children: [
                     Text(
                       DateFormat('MMMM dd, yyyy').format(transactions.tranDate),
-                      // Format DateTime as a String using DateFormat
                       style: const TextStyle(fontSize: 14),
                     ),
                     Text(
                       'Php ${transactions.tranAmount.toStringAsFixed(2)}',
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
