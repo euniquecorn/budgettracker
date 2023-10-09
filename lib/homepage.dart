@@ -1,8 +1,6 @@
-import 'package:budget_tracker/addtransaction.dart';
-import 'package:budget_tracker/transactiondata.dart';
-import 'package:budget_tracker/transactionlist.dart';
-
-import 'package:budget_tracker/transactionview.dart';
+import 'package:budget_tracker/budgetSummary/budgetsummaryview.dart';
+import 'package:budget_tracker/transactions/addtransaction.dart';
+import 'package:budget_tracker/transactions/transactionview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TransactionList transactionList = TransactionList();
   final TextStyle txtBold1 =
       const TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
@@ -35,13 +32,6 @@ class _HomePageState extends State<HomePage> {
     fontSize: 17,
   );
 
-  double totalBudget = 22000.00;
-  void _addTransaction(TransactionData newTransaction) {
-    setState(() {
-      transactionList.itemList.add(newTransaction);
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -54,19 +44,6 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  // Calculate total Expenses
-  double _calculateTotalExpenses() {
-    double totalExpenses = 0;
-    for (var transaction in transactionList.itemList) {
-      totalExpenses += transaction.tranAmount;
-    }
-    return totalExpenses;
-  }
-
-  double _calculateBalance() {
-    return totalBudget - _calculateTotalExpenses();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,93 +51,55 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color.fromARGB(255, 195, 171, 235),
         title: const Text('Budget Tracker'),
       ),
-      body: Column(
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 50),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'PHP ${_calculateBalance().toStringAsFixed(2)}', // Use the calculated balance
-                    style: txtBold2,
-                  ),
-                  Text(
-                    'Balance',
-                    style: txtBold3,
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'PHP ${_calculateTotalExpenses().toStringAsFixed(2)}', // Use the calculated total expenses
-                            style: txtBold1,
-                          ),
-                          const Text('Total Expenses'),
-                        ],
-                      ),
-                      const SizedBox(width: 40),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'PHP ${totalBudget.toStringAsFixed(2)}',
-                            style: txtBold1,
-                          ),
-                          const Text('Total Budget'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: 250,
+              child: BudgetSummaryView(),
             ),
-          ),
-          const Divider(thickness: 2),
-          const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '  Transactions',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Expanded(
-            child: TransactionView(),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                child: const Text('SIGN OUT'),
-              ),
-            ],
-          ),
-        ],
+            const Divider(thickness: 2),
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Transactions',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const Expanded(
+              child: TransactionView(),
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                    } catch (e) {
+                      print('Error signing out: $e');
+                    }
+                  },
+                  child: const Text('SIGN OUT'),
+                )),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Open a dialog/form to add a new transaction
           showDialog(
             context: context,
-            builder: (_) => AddTransactionDialog(
-              onTransactionAdded: (transactionData) {
-                _addTransaction(transactionData);
-                Navigator.of(context).pop();
-              },
-            ),
+            builder: (_) => AddTransactionDialog(),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

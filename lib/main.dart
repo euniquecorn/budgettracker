@@ -1,4 +1,4 @@
-import 'package:budget_tracker/firebase_options.dart';
+import 'package:budget_tracker/firebase/firebase_options.dart';
 import 'package:budget_tracker/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

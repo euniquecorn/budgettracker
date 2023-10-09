@@ -1,14 +1,9 @@
-import 'package:budget_tracker/transactiondata.dart';
-import 'package:budget_tracker/transactions.dart';
+import 'package:budget_tracker/transactions/transactions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddTransactionDialog extends StatefulWidget {
-  final Function(TransactionData) onTransactionAdded;
-
-  AddTransactionDialog({required this.onTransactionAdded});
-
   @override
   _AddTransactionDialogState createState() => _AddTransactionDialogState();
 }

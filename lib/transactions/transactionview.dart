@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:budget_tracker/edittransaction.dart';
-import 'package:budget_tracker/transactions.dart';
+import 'package:budget_tracker/transactions/edittransaction.dart';
+import 'package:budget_tracker/transactions/transactions.dart';
 
 class TransactionView extends StatefulWidget {
   const TransactionView({Key? key}) : super(key: key);
