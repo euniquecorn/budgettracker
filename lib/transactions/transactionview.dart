@@ -1,3 +1,4 @@
+import 'package:budget_tracker/budgetSummary/budgetsummaryview.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,6 +26,14 @@ class _TransactionViewState extends State<TransactionView> {
               )
               .toList(),
         );
+  }
+
+  double calculateTotalExpenses(List<Transactions> transactions) {
+    double totalExpenses = 0;
+    for (var transaction in transactions) {
+      totalExpenses += transaction.tranAmount;
+    }
+    return totalExpenses;
   }
 
   Future deleteUser(String id) async {
@@ -126,6 +135,8 @@ class _TransactionViewState extends State<TransactionView> {
             return Text('Something went wrong! ${snapshot.error}');
           } else if (snapshot.hasData) {
             final transactions = snapshot.data!;
+            overallExpenses = calculateTotalExpenses(transactions);
+            print('Overall Expenses $overallExpenses');
             return ListView(
               children: transactions.map(transactionList).toList(),
             );

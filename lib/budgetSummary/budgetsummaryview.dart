@@ -10,7 +10,7 @@ class BudgetSummaryView extends StatefulWidget {
   State<BudgetSummaryView> createState() => _BudgetSummaryViewState();
 }
 
-TextEditingController totalBudgetController = TextEditingController();
+TextEditingController totalBudget = TextEditingController();
 
 const TextStyle txtBold1 = TextStyle(
   fontSize: 16,
@@ -54,16 +54,8 @@ Future createUser() async {
     id: docUser.id,
     balance: remainingBalance,
     overallExpenses: overallExpenses,
-    totalBudget: double.parse(totalBudgetController.text),
+    totalBudget: double.parse(totalBudget.text),
   );
-}
-
-double calculateTotalExpenses(List<Transactions> transactions) {
-  double totalExpenses = 0.0;
-  for (var transaction in transactions) {
-    totalExpenses += transaction.tranAmount;
-  }
-  return totalExpenses;
 }
 
 double calculateRemainingBalance(double totalBudget, double totalExpenses) {
@@ -71,13 +63,9 @@ double calculateRemainingBalance(double totalBudget, double totalExpenses) {
 }
 
 class _BudgetSummaryViewState extends State<BudgetSummaryView> {
-  late double totalBudget = 0.0;
-  late double overallExpenses = 0.0;
-  late double remainingBalance = 0.0;
-
-  Future<void> _handleMenuSelection(String choice) async {
+  void _handleMenuSelection(String choice) {
     if (choice == 'Set Budget') {
-      await showDialog(
+      showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -86,7 +74,7 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  controller: totalBudgetController,
+                  controller: totalBudget,
                   keyboardType: TextInputType.number,
                   decoration:
                       const InputDecoration(labelText: 'Enter Budget Amount'),
@@ -102,10 +90,7 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    totalBudget = double.parse(totalBudgetController.text);
-                    // Save the totalBudget to your database if needed
-                  });
+                  createUser();
                   Navigator.of(context).pop();
                 },
                 child: const Text('Save'),
@@ -144,7 +129,8 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
                 ],
               ),
               Text(
-                (totalBudget).toStringAsFixed(2),
+                (budgetSummary.totalBudget)
+                    .toStringAsFixed(2), // Use 0.0 as the default value
                 style: txtBold2,
               ),
               const SizedBox(height: 30),
@@ -154,7 +140,8 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        (remainingBalance).toStringAsFixed(2),
+                        (budgetSummary.balance).toStringAsFixed(
+                            2), // Use '0.0' as the default value
                         style: txtBold1,
                       ),
                       const Text('Remaining Balance'),
@@ -165,7 +152,8 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        (overallExpenses).toStringAsFixed(2),
+                        (budgetSummary.overallExpenses).toStringAsFixed(
+                            2), // Use '0.0' as the default value
                         style: txtBold1,
                       ),
                       const Text('Total Expenses'),
