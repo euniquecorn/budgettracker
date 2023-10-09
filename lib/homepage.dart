@@ -1,4 +1,5 @@
 import 'package:budget_tracker/budgetSummary/budgetsummaryview.dart';
+import 'package:budget_tracker/login.dart';
 import 'package:budget_tracker/transactions/addtransaction.dart';
 import 'package:budget_tracker/transactions/transactionview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -82,6 +83,10 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () async {
                     try {
                       await FirebaseAuth.instance.signOut();
+                      print('User signed out successfully');
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const Login(), // Redirect to the login page
+                      ));
                     } catch (e) {
                       print('Error signing out: $e');
                     }
