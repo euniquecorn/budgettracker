@@ -1,5 +1,6 @@
 import 'package:budget_tracker/firebase/authenticator.dart';
 import 'package:budget_tracker/firebase/firebase_options.dart';
+import 'package:budget_tracker/firebase/register.dart';
 import 'package:budget_tracker/homepage.dart';
 import 'package:budget_tracker/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const Register(),
     );
   }
 }

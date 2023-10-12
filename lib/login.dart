@@ -33,52 +33,56 @@ class _LoginState extends State<Login> {
       body: Center(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 25),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: [
-              Text(
-                'SIGN IN',
-                style: txtstyle,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'SIGN IN',
+                    style: txtstyle,
+                  ),
+                  const SizedBox(height: 15),
+                  TextField(
+                    controller: usernamecontroller,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter Username',
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  TextField(
+                    obscureText: true,
+                    controller: passwordcontroller,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter Password',
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    onPressed: () {
+                      checkLogin(
+                        usernamecontroller.text,
+                        passwordcontroller.text,
+                      );
+                    },
+                    child: const Text('LOGIN'),
+                  ),
+                  const SizedBox(height: 15),
+                  (isError)
+                      ? Text(
+                          errormessage,
+                          style: errortxtstyle,
+                        )
+                      : Container(),
+                ],
               ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: usernamecontroller,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter Username',
-                  prefixIcon: Icon(Icons.person),
-                ),
-              ),
-              const SizedBox(height: 15),
-              TextField(
-                obscureText: true,
-                controller: passwordcontroller,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter Password',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-              ),
-              const SizedBox(height: 15),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                onPressed: () {
-                  checkLogin(
-                    usernamecontroller.text,
-                    passwordcontroller.text,
-                  );
-                },
-                child: const Text('LOGIN'),
-              ),
-              const SizedBox(height: 15),
-              (isError)
-                  ? Text(
-                      errormessage,
-                      style: errortxtstyle,
-                    )
-                  : Container(),
             ],
           ),
         ),
