@@ -1,11 +1,6 @@
-import 'package:budget_tracker/budgetSummary/budgetsummary.dart';
 import 'package:flutter/material.dart';
 
 class EditBudgetSummaryDialog extends StatefulWidget {
-  final BudgetSummary budgetSummary;
-
-  EditBudgetSummaryDialog({required this.budgetSummary});
-
   @override
   _EditBudgetSummaryDialogState createState() =>
       _EditBudgetSummaryDialogState();
@@ -19,12 +14,6 @@ class _EditBudgetSummaryDialogState extends State<EditBudgetSummaryDialog> {
   @override
   void initState() {
     super.initState();
-    totalBudgetController = TextEditingController(
-        text: widget.budgetSummary.totalBudget.toString());
-    overallExpensesController = TextEditingController(
-        text: widget.budgetSummary.overallExpenses.toString());
-    balanceController =
-        TextEditingController(text: widget.budgetSummary.balance.toString());
   }
 
   @override
@@ -65,13 +54,6 @@ class _EditBudgetSummaryDialogState extends State<EditBudgetSummaryDialog> {
             double overallExpenses =
                 double.parse(overallExpensesController.text);
             double balance = double.parse(balanceController.text);
-
-            BudgetSummary updatedSummary = BudgetSummary(
-              id: widget.budgetSummary.id,
-              totalBudget: totalBudget,
-              overallExpenses: overallExpenses,
-              balance: balance,
-            );
 
             // Call a function to update the budget summary in your database or state
             // updateBudgetSummary(updatedSummary);
