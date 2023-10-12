@@ -28,14 +28,6 @@ class _TransactionViewState extends State<TransactionView> {
         );
   }
 
-  double calculateTotalExpenses(List<Transactions> transactions) {
-    double totalExpenses = 0;
-    for (var transaction in transactions) {
-      totalExpenses += transaction.tranAmount;
-    }
-    return totalExpenses;
-  }
-
   Future deleteUser(String id) async {
     final docUser =
         FirebaseFirestore.instance.collection('Transactions').doc(id);
@@ -136,7 +128,12 @@ class _TransactionViewState extends State<TransactionView> {
           } else if (snapshot.hasData) {
             final transactions = snapshot.data!;
             overallExpenses = calculateTotalExpenses(transactions);
+            remainingBalance =
+                calculateRemainingBalance(budgetAmount, overallExpenses);
+
             print('Overall Expenses $overallExpenses');
+            print('Remaining Balance $remainingBalance');
+            print('Total Budget $budgetAmount');
             return ListView(
               children: transactions.map(transactionList).toList(),
             );

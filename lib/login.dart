@@ -124,12 +124,14 @@ class _LoginState extends State<Login> {
       setState(() {
         isError = true;
         errormessage = 'Error: ${e.message.toString()}';
+        print(errormessage);
       });
     } catch (e) {
       print(e.toString()); // Handle other exceptions if needed.
       setState(() {
         isError = true;
         errormessage = 'Error: ${e.toString()}';
+        print(errormessage);
       });
     }
 

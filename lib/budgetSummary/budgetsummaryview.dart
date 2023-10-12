@@ -10,7 +10,7 @@ class BudgetSummaryView extends StatefulWidget {
   State<BudgetSummaryView> createState() => _BudgetSummaryViewState();
 }
 
-TextEditingController totalBudget = TextEditingController();
+TextEditingController totalBudgetController = TextEditingController();
 
 const TextStyle txtBold1 = TextStyle(
   fontSize: 16,
@@ -33,33 +33,21 @@ const TextStyle txtBold5 = TextStyle(
   fontSize: 17,
 );
 
-double overallExpenses = 0.0;
-double remainingBalance = 0.0;
+double budgetAmount = 0;
+double overallExpenses = 0;
+double remainingBalance = 0;
 
-Stream<List<BudgetSummary>> readUsers() {
-  return FirebaseFirestore.instance.collection('Transactions').snapshots().map(
-        (snapshot) => snapshot.docs
-            .map(
-              (doc) => BudgetSummary.fromJson(
-                doc.data(),
-              ),
-            )
-            .toList(),
-      );
-}
-
-Future createUser() async {
-  final docUser = FirebaseFirestore.instance.collection('BudgetSummary').doc();
-  final newBudget = BudgetSummary(
-    id: docUser.id,
-    balance: remainingBalance,
-    overallExpenses: overallExpenses,
-    totalBudget: double.parse(totalBudget.text),
-  );
+double calculateTotalExpenses(List<Transactions> transactions) {
+  double totalExpenses = 0;
+  for (var transaction in transactions) {
+    totalExpenses += transaction.tranAmount;
+  }
+  return totalExpenses;
 }
 
 double calculateRemainingBalance(double totalBudget, double totalExpenses) {
-  return totalBudget - totalExpenses;
+  double remBalance = totalBudget - totalExpenses;
+  return remBalance;
 }
 
 class _BudgetSummaryViewState extends State<BudgetSummaryView> {
@@ -74,7 +62,7 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  controller: totalBudget,
+                  controller: totalBudgetController,
                   keyboardType: TextInputType.number,
                   decoration:
                       const InputDecoration(labelText: 'Enter Budget Amount'),
@@ -90,7 +78,12 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  createUser();
+                  double amount = double.parse(totalBudgetController.text);
+                  setState(() {
+                    budgetAmount = amount;
+                    remainingBalance = calculateRemainingBalance(
+                        budgetAmount, overallExpenses);
+                  });
                   Navigator.of(context).pop();
                 },
                 child: const Text('Save'),
@@ -102,7 +95,7 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
     }
   }
 
-  Widget budgetSummaryList(BudgetSummary budgetSummary) => Card(
+  Widget budgetSummaryList() => Card(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 50),
           child: Column(
@@ -129,8 +122,7 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
                 ],
               ),
               Text(
-                (budgetSummary.totalBudget)
-                    .toStringAsFixed(2), // Use 0.0 as the default value
+                '$budgetAmount', // Use 0.0 as the default value
                 style: txtBold2,
               ),
               const SizedBox(height: 30),
@@ -140,23 +132,21 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        (budgetSummary.balance).toStringAsFixed(
-                            2), // Use '0.0' as the default value
+                        ('$remainingBalance'),
                         style: txtBold1,
                       ),
                       const Text('Remaining Balance'),
                     ],
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        (budgetSummary.overallExpenses).toStringAsFixed(
-                            2), // Use '0.0' as the default value
+                        ('$overallExpenses'),
                         style: txtBold1,
                       ),
-                      const Text('Total Expenses'),
+                      const Text('Overall Expenses'),
                     ],
                   ),
                 ],
@@ -169,23 +159,10 @@ class _BudgetSummaryViewState extends State<BudgetSummaryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<BudgetSummary>>(
-        stream: readUsers(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Something went wrong! ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            final budgetSumm = snapshot.data!;
-            return ListView(
-              children: budgetSumm.map(budgetSummaryList).toList(),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
+        body: Column(
+      children: [
+        budgetSummaryList(),
+      ],
+    ));
   }
 }
