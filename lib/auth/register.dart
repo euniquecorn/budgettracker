@@ -6,8 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  final VoidCallback openLoginPage;
-  const Register({Key? key, required this.openLoginPage}) : super(key: key);
+  const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -105,10 +104,11 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Login()));
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
+                      );
                     },
                   ),
                 ],

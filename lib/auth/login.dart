@@ -1,3 +1,4 @@
+import 'package:budget_tracker/auth/register.dart';
 import 'package:budget_tracker/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -82,17 +83,26 @@ class _LoginState extends State<Login> {
                         )
                       : Container(),
                   const SizedBox(height: 15),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Not yet registered? ',
                       ),
-                      Text(
-                        'Sign up here',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const Register(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Sign up here',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ],
