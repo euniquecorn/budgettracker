@@ -1,11 +1,12 @@
-import 'package:budget_tracker/firebase/authenticator.dart';
+import 'package:budget_tracker/auth/authenticator.dart';
 import 'package:budget_tracker/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  const Register({super.key});
+  final VoidCallback openLoginPage;
+  const Register({Key? key, required this.openLoginPage}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -87,6 +88,22 @@ class _RegisterState extends State<Register> {
                       style: errortxtstyle,
                     )
                   : Container(),
+              const SizedBox(height: 15),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Already registered? ',
+                  ),
+                  Text(
+                    'Login here.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

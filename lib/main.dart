@@ -1,8 +1,5 @@
-import 'package:budget_tracker/firebase/authenticator.dart';
 import 'package:budget_tracker/firebase/firebase_options.dart';
-import 'package:budget_tracker/firebase/register.dart';
-import 'package:budget_tracker/homepage.dart';
-import 'package:budget_tracker/auth/login.dart';
+import 'package:budget_tracker/auth/register.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
