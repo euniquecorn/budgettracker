@@ -81,6 +81,22 @@ class _LoginState extends State<Login> {
                           style: errortxtstyle,
                         )
                       : Container(),
+                  const SizedBox(height: 15),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Not yet registered? ',
+                      ),
+                      Text(
+                        'Sign up here',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:budget_tracker/auth/authenticator.dart';
+import 'package:budget_tracker/auth/login.dart';
 import 'package:budget_tracker/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -89,18 +90,26 @@ class _RegisterState extends State<Register> {
                     )
                   : Container(),
               const SizedBox(height: 15),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Already registered? ',
                   ),
-                  Text(
-                    'Login here.',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                  GestureDetector(
+                    child: const Text(
+                      'Sign in here',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
                     ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Login()));
+                    },
                   ),
                 ],
               ),
