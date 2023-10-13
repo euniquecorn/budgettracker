@@ -1,5 +1,5 @@
 import 'package:budget_tracker/homepage.dart';
-import 'package:budget_tracker/login.dart';
+import 'package:budget_tracker/auth/login.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

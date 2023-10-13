@@ -1,5 +1,5 @@
 import 'package:budget_tracker/budgetSummary/budgetsummaryview.dart';
-import 'package:budget_tracker/login.dart';
+import 'package:budget_tracker/auth/login.dart';
 import 'package:budget_tracker/transactions/addtransaction.dart';
 import 'package:budget_tracker/transactions/transactionview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
