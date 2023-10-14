@@ -15,49 +15,23 @@ class Authenticator extends StatefulWidget {
 class _AuthenticatorState extends State<Authenticator> {
   @override
   Widget build(BuildContext context) {
-    var tabs = const [
-      GButton(
-        icon: Icons.account_circle,
-        text: 'Profile',
-      ),
-      GButton(
-        icon: Icons.home,
-        text: 'Home',
-      ),
-      GButton(
-        icon: Icons.logout,
-        text: 'Logout',
-      ),
-    ];
-
     return Scaffold(
-        body: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasData) {
-              return const HomePage();
-            } else {
-              return const Login();
-            }
-          },
-        ),
-        bottomNavigationBar: Container(
-          color: Colors.deepPurple.shade300,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: GNav(
-                backgroundColor: Colors.deepPurple.shade300,
-                color: Colors.white,
-                activeColor: Colors.white,
-                tabBackgroundColor: Colors.purpleAccent,
-                padding: const EdgeInsets.all(15),
-                gap: 8,
-                tabs: tabs),
-          ),
-        ));
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            print('auth-home');
+            return const HomePage();
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            print('auth-login');
+            return const Login();
+          }
+        },
+      ),
+    );
   }
 }
