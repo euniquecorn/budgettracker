@@ -2,6 +2,7 @@ import 'package:budget_tracker/budgetSummary/budgetsummaryview.dart';
 import 'package:budget_tracker/auth/login.dart';
 import 'package:budget_tracker/transactions/addtransaction.dart';
 import 'package:budget_tracker/transactions/transactionview.dart';
+import 'package:budget_tracker/user/userProfile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -68,17 +69,17 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: const Color.fromARGB(255, 195, 171, 235),
           title: const Text('Budget Tracker'),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
+        body: const Padding(
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 250,
                 child: BudgetSummaryView(),
               ),
-              const Divider(thickness: 2),
-              const Row(
+              Divider(thickness: 2),
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -91,26 +92,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              const Expanded(
+              Expanded(
                 child: TransactionView(),
               ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                        print('User signed out successfully');
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>
-                              const Login(), // Redirect to the login page
-                        ));
-                      } catch (e) {
-                        print('Error signing out: $e');
-                      }
-                    },
-                    child: const Text('SIGN OUT'),
-                  )),
             ],
           ),
         ),
@@ -135,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                 tabBackgroundColor: Colors.purpleAccent,
                 padding: const EdgeInsets.all(15),
                 gap: 8,
-                onTabChange: (index) {
+                onTabChange: (index) async {
                   switch (index) {
                     case 0:
                       print('Home: ');
@@ -147,16 +131,23 @@ class _HomePageState extends State<HomePage> {
                       break;
 
                     case 1:
-                      print('Profile: ');
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const UserProfilePage(),
+                      ));
                       break;
 
                     case 2:
                       print('Logout ');
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                      );
+                      try {
+                        await FirebaseAuth.instance.signOut();
+                        print('User signed out successfully');
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) =>
+                              const Login(), // Redirect to the login page
+                        ));
+                      } catch (e) {
+                        print('Error signing out: $e');
+                      }
                       break;
                   }
                 },
